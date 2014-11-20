@@ -1,5 +1,5 @@
+var years = [ 2009, 2010, 2011, 2012, 2013 ];
 var data = {
-    years: [ 2009, 2010, 2011, 2012, 2013 ],
     inntekter: {
         'Skatt på inntekt og formue': [ 347591, 393412, 460617, 471087, 433139 ],
         'Avgifter (produksjonsskatter)': [ 276365, 296919, 308527, 322389, 337948 ],
@@ -26,3 +26,14 @@ var data = {
     }
 };
 
+var nodes = _.keys(data);
+
+/*
+var sankey = d3.sankey()
+    .size([width, height])
+    .nodeWidth(15)
+    .nodePadding(10)
+    .nodes(nodes)
+    .links(links)
+    .layout(32);
+*/
