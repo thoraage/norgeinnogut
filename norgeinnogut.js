@@ -48,10 +48,11 @@
         return reorg2(data, nodes, links, -1, yearIndex);
     }
 
-    var nodes = [];
-    var links = [];
+    var nodes = [], links = [];
     reorg(data, nodes, links, 4);
-
+//    var nodes = _.map(["a", "b", "c", "d", "e", "f"], function(o) { return { name: o }; });
+//    var links = _.map([[3, 4, 2], [0, 1, 5], [1, 3, 2], [1, 2, 3], [4, 5, 2]], function(o) { return { source: o[0], target: o[1], value: o[2] } });
+    
     //nodes = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
     //links = [{ source: 0, target: 1, value: 50 }, { source: 0, target: 2, value: 100 }];
     console.log(nodes);
@@ -124,8 +125,8 @@
       .attr("text-anchor", "start");
 
     function dragmove(d) {
-    d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
-    sankey.relayout();
-    link.attr("d", path);
+      d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+      sankey.relayout();
+      link.attr("d", path);
     }
 })();

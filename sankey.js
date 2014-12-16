@@ -193,7 +193,7 @@ d3.sankey = function() {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
             var y = d3.sum(node.targetLinks, weightedSource) / d3.sum(node.targetLinks, value);
-            node.y += (y - center(node)) * alpha;
+            node.y += 0;//(y - center(node)) * alpha;
           }
         });
       });
