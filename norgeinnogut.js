@@ -28,6 +28,27 @@
             }
         }
     };
+    
+    data = {
+        'Inntekter': {
+            'Skatter': [ 479660, 533621, 594938, 618816, 598671 ],
+            'Avgifter': [ 286614, 307922, 319746, 333554, 350197 ],
+            'Kapitalskatter': [ 2431, 2377, 1754, 1887, 2246 ],
+            'Trygde- og pensjonspremier': [ 233433, 243329, 259012, 277015, 292024 ],
+            'Formuesinntekter': {
+                'Renteinntekter': [ 93935, 86128, 89840, 81558, 85445 ],
+                'Utbytte': [ 74987, 70332, 95146, 101929, 113897 ],
+                'Uttak fra forretningsdrift': [ 99887, 101740, 127408, 150764, 133411 ],
+                'Bompenger, leieinntekter av naturressurser mv': [ 8874, 7585, 9066, 11496, 12147 ]
+            },
+            'Betalinger for offentlige tjenester mv.': [ 66130, 71404, 74937, 78962, 82133 ],
+            'Løpende overføringer': {
+                'Bøter, inndragninger mv.': [ 1732, 2152, 2015, 1978, 1951 ],
+                'Andre innenlandske overføringer': [ 6306, 6642, 6726, 6679, 7158 ]
+            },
+            'Overføringer fra utlandet': [ 138, 52, 7, 39, 47 ]
+        }
+    };
 
     function reorg2(data, nodes, links, parentIndex, yearIndex, reverse) {
         return _.chain(data).pairs().map(function(pair) {
