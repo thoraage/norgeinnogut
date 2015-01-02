@@ -29,27 +29,28 @@
         }
     };
 
-    function reorg2(data, nodes, links, parentIndex, yearIndex) {
+    function reorg2(data, nodes, links, parentIndex, yearIndex, reverse) {
         return _.chain(data).pairs().map(function(pair) {
             var index = nodes.length, sum;
             nodes.push({ name: pair[0] });
             if (_.isArray(pair[1])) {
                 sum = pair[1][yearIndex];
             } else {
-                sum = reorg2(pair[1], nodes, links, index, yearIndex);
+                sum = reorg2(pair[1], nodes, links, index, yearIndex, reverse);
             }
             if (parentIndex >= 0 ) {
-                links.push({ source: parentIndex, target: index, value: sum });
+                if (reverse) links.push({ source: parentIndex, target: index, value: sum });
+                else links.push({ source: index, target: parentIndex, value: sum });
             }
             return sum;
         }).reduce(function(sum, v) { return sum + v; }, 0).value();
     }
-    function reorg(data, nodes, links, yearIndex) {
-        return reorg2(data, nodes, links, -1, yearIndex);
+    function reorg(data, nodes, links, yearIndex, reverse) {
+        return reorg2(data, nodes, links, -1, yearIndex, reverse);
     }
 
     var nodes = [], links = [];
-    reorg(data, nodes, links, 4);
+    reorg(data, nodes, links, 4, true);
 //    var nodes = _.map(["a", "b", "c", "d", "e", "f"], function(o) { return { name: o }; });
 //    var links = _.map([[3, 4, 2], [0, 1, 5], [1, 3, 2], [1, 2, 3], [4, 5, 2]], function(o) { return { source: o[0], target: o[1], value: o[2] } });
     
