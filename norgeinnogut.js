@@ -28,7 +28,7 @@
             }
         }
     };
-    
+
     data = {
         'Inntekter': {
             'Skatter': [ 479660, 533621, 594938, 618816, 598671 ],
@@ -50,6 +50,30 @@
         }
     };
 
+    data = {
+        'Løpende utgifter': {
+            'Lønnskostnader': [ 322659, 340251, 362193, 384823, 406746 ],
+            'Kjøp av varer og tjenester': [ 144266, 151004, 155097, 159799, 169684 ],
+            'Kapitalslit (ifm. løpende utgifter)': [ 68755, 73589, 79448, 86704, 91532 ],
+            'Formuesutgifter': {
+                'Renteutgifter': [ 36165, 32029, 31590, 26534, 25744 ],
+                'Leie av tomter og grunn': [ 4, 4, 4, 6, 4 ]
+            },
+            'Stønader i naturalia (produktkjøp til husholdninger)': [ 51704, 56137, 58131, 60942, 62779 ],
+            'Stønader i kontanter til husholdninger': [ 326722, 345532, 367100, 386778, 404427 ],
+            'Subsidier': [ 49311, 52383, 53311, 55603, 58042 ],
+            'Løpende overføringer': {
+                'Overføringer til ideelle organisasjoner': [ 29813, 30306, 31737, 33378, 36663 ],
+                'Andre innenlandske overføringer': [ 1709, 1826, 2057, 2193, 2277 ],
+                'Overføringer til utlandet': [ 27292, 29829, 28696, 27838, 32087 ]
+            },
+            'Kapitaloverføringer': {
+                'Innenlandske kapitaloverføringer': [ 3472, 2740, 3302, 2877, 2967 ],
+                'Kapitaloverføringer til utlandet': [ 1120, 1268, 1500, 1280, 1377 ]
+            }
+        }
+    };
+    
     function reorg2(data, nodes, links, parentIndex, yearIndex, reverse) {
         return _.chain(data).pairs().map(function(pair) {
             var index = nodes.length, sum;
