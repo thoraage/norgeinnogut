@@ -1,35 +1,8 @@
 (function() {
     'use strict';
 
-    var years = [ 2009, 2010, 2011, 2012, 2013 ],
-        data = {
-        'Inntekter': {
-            'Skatt på inntekt og formue': [ 347591, 393412, 460617, 471087, 433139 ],
-            'Avgifter (produksjonsskatter)': [ 276365, 296919, 308527, 322389, 337948 ],
-            'Kapitalskatter': [ 2431, 2377, 1754, 1887, 2246 ],
-            'Trygde og pensjonspremier': [ 234864, 244330, 261263, 278820, 292782 ],
-            'Formuesinntekter': {
-                'Renteinntekter': [ 86548, 81951, 83295, 75650, 80029 ],
-                'Utbytte': [ 69526, 65110, 86410, 96416, 108386 ],
-                'Uttak fra forretningsdrift': {
-                    'Uttak fra sdøe': [ 98285, 100258, 125820, 148446, 131604 ],
-                    'Uttak fra annen virksomhet': [ 14, 6, 12, -14, -2]
-                },
-                'Bompenger, leieinntekter av grunn mv': [ 7335, 4619, 4877, 7031, 8794 ]
-            },
-            'Gebyrinntekter': [ 21164, 23033, 23594, 24705, 25276 ],
-            'Løpende overføringer': {
-                'Overføringer fra offentlig forvaltning': {
-                    'Overføringer fra kommuneforvaltningen': [ 2269, 1474, 1262, 6848, 7285 ]
-                },
-                'Bøter, inndragninger mv.': [ 1732, 2152, 2015, 1978, 1938 ],
-                'Andre innenlandske overføringer': [ 1808, 1731, 2013, 1909, 1618 ],
-                'Overføringer fra utlandet': [ 138, 52, 7, 39, 46 ]
-            }
-        }
-    };
-
-    data = {
+    var years = [ 2009, 2010, 2011, 2012, 2013 ];
+    var incomes = {
         'Inntekter': {
             'Skatter': [ 479660, 533621, 594938, 618816, 598671 ],
             'Avgifter': [ 286614, 307922, 319746, 333554, 350197 ],
@@ -49,8 +22,7 @@
             'Overføringer fra utlandet': [ 138, 52, 7, 39, 47 ]
         }
     };
-
-    data = {
+    var expenses = {
         'Løpende utgifter': {
             'Lønnskostnader': [ 322659, 340251, 362193, 384823, 406746 ],
             'Kjøp av varer og tjenester': [ 144266, 151004, 155097, 159799, 169684 ],
@@ -74,28 +46,37 @@
         }
     };
     
-    function reorg2(data, nodes, links, parentIndex, yearIndex, reverse) {
-        return _.chain(data).pairs().map(function(pair) {
-            var index = nodes.length, sum;
-            nodes.push({ name: pair[0] });
-            if (_.isArray(pair[1])) {
-                sum = pair[1][yearIndex];
-            } else {
-                sum = reorg2(pair[1], nodes, links, index, yearIndex, reverse);
-            }
-            if (parentIndex >= 0 ) {
-                if (reverse) links.push({ source: parentIndex, target: index, value: sum });
-                else links.push({ source: index, target: parentIndex, value: sum });
-            }
-            return sum;
-        }).reduce(function(sum, v) { return sum + v; }, 0).value();
-    }
     function reorg(data, nodes, links, yearIndex, reverse) {
-        return reorg2(data, nodes, links, -1, yearIndex, reverse);
+        function _reorg(data, parentIndex) {
+            return _.chain(data).pairs().map(function(pair) {
+                var index = nodes.length, sum;
+                nodes.push({ name: pair[0] });
+                if (_.isArray(pair[1])) {
+                    sum = pair[1][yearIndex];
+                } else {
+                    sum = _reorg(pair[1], index);
+                }
+                if (parentIndex >= 0 ) {
+                    if (reverse) links.push({ source: parentIndex, target: index, value: sum });
+                    else links.push({ source: index, target: parentIndex, value: sum });
+                }
+                return sum;
+            }).reduce(function(sum, v) { return sum + v; }, 0).value();
+        };
+        return _reorg(data, -1);
+    }
+
+    function join(left, right, nodes, links, yearIndex) {
+        reorg(right, nodes, links, 4, true);
+        var index = nodes.length;
+        reorg(left, nodes, links, 4, false);
+        function sum(a, b) { return a + b; }
+        links.push({ source: index, target: 0, value: _.chain(links).filter(function(link) { return link.source == 0; }).pluck('value').reduce(sum).value() });
     }
 
     var nodes = [], links = [];
-    reorg(data, nodes, links, 4, true);
+    join(incomes, expenses, nodes, links, 4);
+    
 //    var nodes = _.map(["a", "b", "c", "d", "e", "f"], function(o) { return { name: o }; });
 //    var links = _.map([[3, 4, 2], [0, 1, 5], [1, 3, 2], [1, 2, 3], [4, 5, 2]], function(o) { return { source: o[0], target: o[1], value: o[2] } });
     
